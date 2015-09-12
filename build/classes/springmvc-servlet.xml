@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<!-- 启动spring MVC注解驱动 -->
+	<mvc:annotation-driven />
+	
+	<!-- 配置默认的handler，该配置调用服务器(tomcat)的资源过滤器，当他检测到该映射没有被DispatcherServlet映射
+	将对调用默认的handler，直接访问目标资源，也就是静态资源 -->
+	<mvc:default-servlet-handler/>
+
+	<!-- 指定扫描包路径 -->
+	<context:component-scan base-package="cn.easybuy.controller" />
+	
+	<!-- 视图解析器（对view进行路径解析）, 属性为view的前路径和后缀 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
+		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
+		
+	<!-- 支持上传文件 -->  
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    	<property name="maxUploadSize" value="1048576" />
+    </bean>
+    
+    <!-- 对静态资源访问
+    <mvc:resources location="/img/" mapping="/img/**"/>
+    <mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:resources location="/upload/" mapping="/upload/**"/>
+     -->
+    
+</beans>

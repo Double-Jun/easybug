@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<!-- 开启注解 (此配置也可以不用，因为配置包扫描时会默认开启注解配置) 
+	<context:annotation-config /> 
+	-->
+
+	<!-- 扫描指定包的组件注解 -->
+	<context:component-scan base-package="cn.easybuy.dao, cn.easybuy.service" />
+
+	<!-- 加载外部配置文件（数据库连接基本信息） -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<!-- 配置数据源(使用c3p0) -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<!-- 数据库基本连接信息 -->
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="driverClass" value="${jdbc.driverClass}" />
+		<property name="user" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 其他配置 -->
+		<property name="initialPoolSize" value="6" />
+		<property name="minPoolSize" value="6" />
+		<property name="maxPoolSize" value="10" />
+		<property name="acquireIncrement" value="3" />
+		<property name="maxIdleTime" value="1800" />
+	</bean>
+
+	<!-- 事务管理（spring管理事务） -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 申明式注解事务管理 
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	-->
+	
+</beans>
